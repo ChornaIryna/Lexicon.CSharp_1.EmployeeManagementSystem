@@ -22,7 +22,8 @@
 
         private static void ShowMenu()
         {
-            Console.WriteLine("\n1. Lägg till anställd");
+            Console.WriteLine();
+            Console.WriteLine("1. Lägg till anställd");
             Console.WriteLine("2. Skriv ut register");
             Console.WriteLine("3. Avsluta");
             Console.Write("Välj ett alternativ (Mata in 1, 2 eller 3): ");
