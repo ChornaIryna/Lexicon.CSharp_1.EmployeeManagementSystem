@@ -1,8 +1,9 @@
 ﻿namespace EmployeeManagementSystem
 {
-    class EmployeeRegistry
+    public class EmployeeRegistry
     {
-        private List<Employee> employees = new List<Employee>();
+        private readonly List<Employee> employees = [];
+        public IReadOnlyList<Employee> Employees => employees;
 
         public void AddEmployee(Employee employee)
         {
