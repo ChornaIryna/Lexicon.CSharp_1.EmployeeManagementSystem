@@ -1,81 +1,80 @@
-﻿namespace EmployeeManagementSystem
+﻿namespace EmployeeManagementSystem;
+
+class ConsoleView
 {
-    class ConsoleView
+    private readonly EmployeeRegistry registry = new();
+
+    public void Run()
     {
-        private readonly EmployeeRegistry registry = new();
-
-        public void Run()
+        while (true)
         {
-            while (true)
+            ShowMenu();
+            if (int.TryParse(Console.ReadLine().Trim(), out int choice))
             {
-                ShowMenu();
-                if (int.TryParse(Console.ReadLine().Trim(), out int choice))
-                {
-                    HandleChoice(choice);
-                }
-                else
-                {
-                    Console.WriteLine("Ogiltigt val.");
-                }
+                HandleChoice(choice);
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt val.");
             }
         }
+    }
 
-        private static void ShowMenu()
+    private static void ShowMenu()
+    {
+        Console.WriteLine();
+        Console.WriteLine("1. Lägg till anställd");
+        Console.WriteLine("2. Skriv ut register");
+        Console.WriteLine("3. Avsluta");
+        Console.Write("Välj ett alternativ (Mata in 1, 2 eller 3): ");
+    }
+
+    private void HandleChoice(int choice)
+    {
+        switch (choice)
         {
-            Console.WriteLine();
-            Console.WriteLine("1. Lägg till anställd");
-            Console.WriteLine("2. Skriv ut register");
-            Console.WriteLine("3. Avsluta");
-            Console.Write("Välj ett alternativ (Mata in 1, 2 eller 3): ");
+            case 1:
+                Employee employee = GetEmployeeData();
+                if (employee != null)
+                {
+                    registry.AddEmployee(employee);
+                }
+                break;
+            case 2:
+                registry.PrintRegistry();
+                break;
+            case 3:
+                Environment.Exit(0);
+                break;
+            default:
+                Console.WriteLine("Ogiltigt val.");
+                break;
         }
+    }
 
-        private void HandleChoice(int choice)
+    private static Employee GetEmployeeData()
+    {
+        string name;
+        do
         {
-            switch (choice)
+            Console.Write("Ange ett namn: ");
+            name = Console.ReadLine().Trim();
+            if (string.IsNullOrEmpty(name))
             {
-                case 1:
-                    Employee employee = GetEmployeeData();
-                    if (employee != null)
-                    {
-                        registry.AddEmployee(employee);
-                    }
-                    break;
-                case 2:
-                    registry.PrintRegistry();
-                    break;
-                case 3:
-                    Environment.Exit(0);
-                    break;
-                default:
-                    Console.WriteLine("Ogiltigt val.");
-                    break;
+                Console.WriteLine("Ogiltigt namn.");
             }
-        }
+        } while (string.IsNullOrEmpty(name));
 
-        private static Employee GetEmployeeData()
+        decimal salary;
+        do
         {
-            string name;
-            do
+            Console.Write("Ange lön: ");
+            if (!decimal.TryParse(Console.ReadLine().Trim(), out salary))
             {
-                Console.Write("Ange namn: ");
-                name = Console.ReadLine().Trim();
-                if (string.IsNullOrEmpty(name))
-                {
-                    Console.WriteLine("Ogiltigt namn.");
-                }
-            } while (string.IsNullOrEmpty(name));
+                Console.WriteLine("Ogiltig lön. Mata in ett tal i decimalform (ex.: 10,99).");
+            }
+        } while (salary <= 0);
 
-            decimal salary;
-            do
-            {
-                Console.Write("Ange lön: ");
-                if (!decimal.TryParse(Console.ReadLine().Trim(), out salary))
-                {
-                    Console.WriteLine("Ogiltig lön. Mata in ett tal i decimalform (ex.: 10,99).");
-                }
-            } while (salary <= 0);
-
-            return new Employee(name, salary);
-        }
+        return new Employee(name, salary);
     }
 }
